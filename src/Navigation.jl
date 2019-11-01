@@ -116,6 +116,8 @@ end
 """
 Ground speed given the course (in radians), airspeed, wind speed and
 wind direction (in radians). The speeds need to use the same speed unit.
+
+source: http://edwilliams.org/avform.htm
 """
 function Vground(Vtas::Float64, Vwind::Float64, ∠wind::Float64, course::Float64)
     swc = (Vwind / Vtas) * sin(∠wind - course)
@@ -143,5 +145,10 @@ end
 #TODO Intersectino of two paths given start points and bearings
 #TODO Cross-track distance
 #TODO Closest point to the poles
+#TODO Crossing parallels
+#TODO Cross track error
+#TODO Head- and cross-wind components
+#TODO Closest point to the poles
+#TODO Rhumb lines
 
 end # module
