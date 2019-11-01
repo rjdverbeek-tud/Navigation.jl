@@ -15,4 +15,8 @@ using Test
     @test Vground(120.0, 40.0, deg2rad(315.0), deg2rad(245.0)) ≈ 100.3 atol = 0.1
     @test Navigation.normalize(-270.0, -180.0, 180.0) ≈ 90.0 atol = 0.1
     @test Navigation.normalize(181.0, -180.0, 180.0) ≈ -179.0 atol = 0.1
+    @test rad2deg(p1).ϕ ≈ 28.6479 atol = 0.0001
+    @test rad2deg(p2).λ ≈ 28.6479 atol = 0.0001
+    @test deg2rad(p1).ϕ ≈ 0.0087 atol = 0.0001
+    @test deg2rad(p2).λ ≈ 0.0087 atol = 0.0001
 end
