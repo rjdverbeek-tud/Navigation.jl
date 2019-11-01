@@ -1,0 +1,13 @@
+name = "Navigation"
+uuid = "cc87a3b2-3706-4f35-b5b4-b2c85061916d"
+authors = ["René Verbeek"]
+version = "0.1.0"
+
+[compat]
+julia = "1.2"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
