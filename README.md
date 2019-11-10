@@ -9,13 +9,25 @@ This package provides a number of navigation functions.
 The functions are based on the Aviation Formulary V1.46 of Ed Williams and the
 latlong scripts of Movable-type.
 
-The list of navigation functions are:
-- distance
-- bearing
-- final_bearing
-- midpoint
-- intermediate_point
-- Vground
+Implemented Functions:
+* distance
+* bearing
+* final_bearing
+* midpoint
+* intermediate_point
+* destination_point
+* intersection_point
+* along_track_distance
+* Vground
+* head_wind
+* cross_wind
+* normalize
+
+Implemented Types:
+* Point(ϕ, λ)
+
+Implemented constants:
+* Rₑ    Radius Earth in [m]
 
 The calculations are done using the Point struct for specifying points as radians
 
