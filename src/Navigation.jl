@@ -24,11 +24,11 @@ Implemented Types:
 * Point(ϕ, λ)
 
 Implemented constants:
-* Rₑ    Radius Earth in [m]
+* Rₑ_m    Radius Earth in [m]
 
 Based on
-source: https://www.movable-type.co.uk/scripts/latlong.html
-source: http://edwilliams.org/avform.htm
+source: www.movable-type.co.uk/scripts/latlong.html
+source: edwilliams.org/avform.htm
 """
 module Navigation
 
@@ -39,12 +39,13 @@ intermediate_point, Vground, destination_point, intersection_point,
 cross_track_distance, along_track_distance, head_wind, cross_wind
 
 """
-Radius Earth [m]
-https://en.wikipedia.org/wiki/Earth_radius
-"""
-const Rₑ = 6371008.7714
+    Radius Earth [m]
 
-"Point type with latitude ϕ [rad] and longitude λ [rad]"
+Source: en.wikipedia.org/wiki/Earth_radius
+"""
+const Rₑ_m = 6371008.7714
+
+"Point type with latitude `ϕ` [rad] and longitude `λ` [rad]"
 struct Point{T<:Float64}
     ϕ::T
     λ::T
@@ -55,20 +56,15 @@ end
 (deg2rad)(x::Point) = Point(deg2rad(x.ϕ), deg2rad(x.λ))
 
 """
-"""
-# function normalize_angle(angle::Float64)
-#     return (angle + 2.0*π)
-# end
+    distance(pos₁::Point, pos₂::Point[, radius::Float64=Rₑ_m])
 
-"""
-distance(pos₁::Point, pos₂::Point, radius::Float64=Rₑ)
+Return the `distance` in [m] of the great circle line between the positions `pos₁`
+and `pos₂` on a sphere, with a given `radius`, calculated using the haversine
+formula. The haversine gives also good estimations at short distances.
 
-Distance (=[Rₑ]) on a sphere calculated using the haversine formula
-The haversine gives also good estimations at short distances
-
-source: https://www.movable-type.co.uk/scripts/latlong.html
+Source: www.movable-type.co.uk/scripts/latlong.html
 """
-function distance(pos₁::Point, pos₂::Point, radius::Float64=Rₑ)
+function distance(pos₁::Point, pos₂::Point, radius::Float64=Rₑ_m)
     Δpos = pos₂ - pos₁
     a = sin(Δpos.ϕ/2.0)^2 + cos(pos₁.ϕ)*cos(pos₂.ϕ)*sin(Δpos.λ/2.0)^2
     c = 2.0 * atan(√a, √(1.0 - a))
@@ -76,12 +72,12 @@ function distance(pos₁::Point, pos₂::Point, radius::Float64=Rₑ)
 end
 
 """
-bearing(pos₁::Point, pos₂::Point)
+    bearing(pos₁::Point, pos₂::Point)
 
-Initial bearing [rad] of the great circle line between the positions 1
-(Point) and 2 (Point) on a sphere
+Return the initial `bearing` [rad] of the great circle line between the
+positions `pos₁` and `pos₂` on a sphere.
 
-source: https://www.movable-type.co.uk/scripts/latlong.html
+Source: www.movable-type.co.uk/scripts/latlong.html
 """
 function bearing(pos₁::Point, pos₂::Point)
     Δpos = pos₂ - pos₁
@@ -90,23 +86,24 @@ function bearing(pos₁::Point, pos₂::Point)
 end
 
 """
-final_bearing(pos₁::Point, pos₂::Point)
+    final_bearing(pos₁::Point, pos₂::Point)
 
-Final bearing [rad] of the great circle line between the positions 1
-(Point) and 2 (Point) on a sphere
+Return the `final_bearing` [rad] of the great circle line between the positions
+`pos₁` and `pos₂` on a sphere.
 
-source: https://www.movable-type.co.uk/scripts/latlong.html
+Source: www.movable-type.co.uk/scripts/latlong.html
 """
 function final_bearing(pos₁::Point, pos₂::Point)
     return mod2pi(bearing(pos₂, pos₁) + π)
 end
 
 """
-midpoint(pos₁::Point, pos₂::Point)
+    midpoint(pos₁::Point, pos₂::Point)
 
-The half-way point (Point) on a great circle path between two points (Point)
+Return the half-way point `midpoint` (Point) on the great circle line between
+the positions `pos₁` and `pos₂` on a sphere.
 
-source: https://www.movable-type.co.uk/scripts/latlong.html
+Source: www.movable-type.co.uk/scripts/latlong.html
 """
 function midpoint(pos₁::Point, pos₂::Point)
     Δpos = pos₂ - pos₁
@@ -118,16 +115,17 @@ function midpoint(pos₁::Point, pos₂::Point)
 end
 
 """
-intermediate_point(pos₁::Point, pos₂::Point, fraction::Float64 = 0.5)
+    intermediate_point(pos₁::Point, pos₂::Point[, fraction::Float64 = 0.5])
 
-An intermediate point (Point) at any fraction along the great circle path
-between two points 1 (Point) and 2 (Point). The fraction along the great circle
-route is such that fraction = 0.0 is at point 1 and fraction 1.0 is at point 2.
+Return the `intermediate_point` (Point) at any `fraction` along the great circle
+path between two points with positions `pos₁` and `pos₂`. The fraction along the
+great circle route is such that `fraction` = 0.0 is at `pos₁` and `fraction` 1.0
+is at `pos₂`.
 
-source: https://www.movable-type.co.uk/scripts/latlong.html
+Source: www.movable-type.co.uk/scripts/latlong.html
 """
 function intermediate_point(pos₁::Point, pos₂::Point, fraction::Float64 = 0.5)
-    δ = distance(pos₁, pos₂) / Rₑ
+    δ = distance(pos₁, pos₂) / Rₑ_m
     a = sin((1.0 - fraction) * δ) / sin(δ)
     b = sin(fraction * δ) / sin(δ)
     x = a * cos(pos₁.ϕ) * cos(pos₁.λ) + b * cos(pos₂.ϕ) * cos(pos₂.λ)
@@ -139,18 +137,18 @@ function intermediate_point(pos₁::Point, pos₂::Point, fraction::Float64 = 0.
 end
 
 """
-destination_point(start_pos::Point, distance::Float64, bearing::Float64
-, radius::Float64=Rₑ)
+    destination_point(start_pos::Point, distance::Float64, bearing::Float64
+[, radius::Float64=Rₑ_m])
 
-Given a start point (Point), initial bearing [rad] (clockwise from North),
-distance (=[Rₑ]), and the earth radius (Rₑ) calculate the destina­tion point
+Given a `start_pos` (Point), initial `bearing` [rad] (clockwise from North),
+`distance` [m], and the earth radius [m] calculate the `destina­tion_point`
 (Point) travelling along a (shortest distance) great circle arc.
 (The distance must use the same radius as the radius of the earth.)
 
-source: https://www.movable-type.co.uk/scripts/latlong.html
+Source: www.movable-type.co.uk/scripts/latlong.html
 """
 function destination_point(start_pos::Point, distance::Float64, bearing::Float64,
-    radius::Float64=Rₑ)
+    radius::Float64=Rₑ_m)
     δ = distance / radius  # Angular distance
     ϕ₂ = asin(sin(start_pos.ϕ) * cos(δ) + cos(start_pos.ϕ) * sin(δ) * cos(bearing))
     λ₂ = start_pos.λ + atan(sin(bearing) * sin(δ) * cos(start_pos.ϕ),
@@ -159,15 +157,16 @@ function destination_point(start_pos::Point, distance::Float64, bearing::Float64
 end
 
 """
-intersection_point(pos₁::Point, pos₂::Point, bearing₁₃::Float64, bearing₂₃::Float64)
+    intersection_point(pos₁::Point, pos₂::Point, bearing₁₃::Float64,
+    bearing₂₃::Float64)
 
-The intersection point pos₃ (Point) of two great circle paths given two start
-points (Point) pos₁ and pos₂ and two bearings [rad] from pos₁ to pos₃, and from
-pos₂ to pos₃.
+Return the intersection point `pos₃` (Point) of two great circle paths given two
+start points (Point) `pos₁`` and `pos₂`` and two bearings [rad] from `pos₁` to
+`pos₃`, and from `pos₂` to `pos₃`.
 
-Under certain circumstances the results can be an infinite or ambiguous solution.
+Under certain circumstances the results can be an ∞ or ambiguous solution.
 
-source: http://edwilliams.org/avform.htm
+Source: edwilliams.org/avform.htm
 """
 function intersection_point(pos₁::Point, pos₂::Point, bearing₁₃::Float64,
     bearing₂₃::Float64)
@@ -202,76 +201,96 @@ function intersection_point(pos₁::Point, pos₂::Point, bearing₁₃::Float64
 end
 
 """
-cross_track_distance(pos₁::Point, pos₂::Point, pos₃::Point, radius::Float64=Rₑ)
+    cross_track_distance(pos₁::Point, pos₂::Point, pos₃::Point[
+    , radius::Float64=Rₑ_m])
 
-Cross-track distance from a point pos₃ (Point) to a great circle path defined
-by the points pos₁ and pos₂ (Point).
+Return the `cross_track_distance` [m] from a point `pos₃` (Point) to a great
+circle path defined by the points `pos₁` and `pos₂` (Point).
 
-cross_track_distance(pos₁::Point, bearing::Float64, pos₃::Point, radius::Float64=Rₑ)
-
-Cross-track distance from a point pos₃ (Point) to a great circle path defined
-by the point pos₁ and bearing [rad].
-
-cross_track_distance(∠distance₁₃::Float64, bearing₁₂::Float64,
-    bearing₁₃::Float64, radius::Float64=Rₑ)
-
-Cross-track distance from a point pos₃ to a great circle path. The distance is
-calculated using the angular distance between points pos₁ and pos₃ (Point),
-the bearing [rad] between points pos₁ and pos₃ (Point), the bearing [rad]
-between points pos₁ and pos₂ (Point), and the radius of the earth.
-
-source: https://www.movable-type.co.uk/scripts/latlong.html
+Source: www.movable-type.co.uk/scripts/latlong.html
 """
 function cross_track_distance(pos₁::Point, pos₂::Point, pos₃::Point,
-    radius::Float64=Rₑ)
+    radius::Float64=Rₑ_m)
     ∠distance₁₃ = distance(pos₁, pos₃ , radius) / radius
     bearing₁₃ = bearing(pos₁, pos₃)
     bearing₁₂ = bearing(pos₁, pos₂)
     return cross_track_distance(∠distance₁₃, bearing₁₂, bearing₁₃, radius)
 end
 
+"""
+    cross_track_distance(pos₁::Point, bearing::Float64, pos₃::Point[
+    , radius::Float64=Rₑ_m])
+
+Return the `cross_track_distance` [m] from a point `pos₃` (Point) to a great
+circle path defined by the point `pos₁` and `bearing` [rad].
+
+Source: www.movable-type.co.uk/scripts/latlong.html
+"""
 function cross_track_distance(pos₁::Point, bearing::Float64, pos₃::Point,
-    radius::Float64=Rₑ)
+    radius::Float64=Rₑ_m)
     pos₂ = destination_point(pos₁, radius, bearing, radius)
     return cross_track_distance(pos₁, pos₂, pos₃, radius)
 end
 
+"""
+    cross_track_distance(∠distance₁₃::Float64, bearing₁₂::Float64,
+    bearing₁₃::Float64[, radius::Float64=Rₑ_m])
+
+Return the `cross_track_distance` [m] from a point `pos₃` to a great circle
+path. The distance is calculated using the angular distance between points `pos₁`
+and `pos₃` (Point), the `bearing` [rad] between points `pos₁` and `pos₃` (Point)
+, the `bearing` [rad] between points `pos₁` and `pos₂` (Point), and the
+`radius` of the earth [m].
+
+Source: www.movable-type.co.uk/scripts/latlong.html
+"""
 function cross_track_distance(∠distance₁₃::Float64, bearing₁₂::Float64,
-    bearing₁₃::Float64, radius::Float64=Rₑ)
+    bearing₁₃::Float64, radius::Float64=Rₑ_m)
     return asin(sin(∠distance₁₃) * sin(bearing₁₃ - bearing₁₂)) * radius
 end
 
 """
-along_track_distance(pos₁::Point, pos₂::Point, pos₃::Point, radius::Float64=Rₑ)
+    along_track_distance(pos₁::Point, pos₂::Point, pos₃::Point[,
+    radius::Float64=Rₑ_m])
 
-The along-track distance from the start point pos₁ (Point) to the closest point
-on the great circle path (defined by points pos₁ and pos₂ (Point)) to the point
-pos₃ (Point). The radius of the earth can also be given.
+The `along_track_distance` from the start point `pos₁` (Point) to the closest
+point on the great circle path (defined by points `pos₁` and `pos₂` (Point)) to
+the point `pos₃` (Point). The `radius` of the earth can also be given.
 
-along_track_distance(∠distance₁₃::Float64, cross_track_∠distance::Float64, radius::Float64=Rₑ)
-
-source: https://www.movable-type.co.uk/scripts/latlong.html
+Source: www.movable-type.co.uk/scripts/latlong.html
 """
 function along_track_distance(pos₁::Point, pos₂::Point, pos₃::Point,
-    radius::Float64=Rₑ)
+    radius::Float64=Rₑ_m)
     ∠distance₁₃ = distance(pos₁, pos₃, radius)
     cross_track_∠distance = cross_track_distance(pos₁, pos₂, pos₃, radius) / radius
     return along_track_distance(∠distance₁₃, cross_track_∠distance, radius)
 end
 
+"""
+    along_track_distance(∠distance₁₃::Float64, cross_track_∠distance::Float64,
+    [radius::Float64=Rₑ_m])
+
+The `along_track_distance` from the start point `pos₁` (Point) to the closest
+point on the great circle path (defined by angular distance `∠distance₁₃` [rad]
+between `pos₁` and `pos₃` (Point) and the cross track angular distance
+`cross_track_∠distance` [rad]) to the point `pos₃` (Point). The `radius` of the
+earth can also be given.
+
+Source: www.movable-type.co.uk/scripts/latlong.html
+"""
 function along_track_distance(∠distance₁₃::Float64,
-    cross_track_∠distance::Float64, radius::Float64=Rₑ)
+    cross_track_∠distance::Float64, radius::Float64=Rₑ_m)
     return acos(cos(∠distance₁₃) / cos(cross_track_∠distance)) * radius
 end
 
 """
-Vground(Vtas::Float64, Vwind::Float64, ∠wind::Float64, course::Float64)
+    Vground(Vtas::Float64, Vwind::Float64, ∠wind::Float64, course::Float64)
 
-Ground speed (=[Vtas]) given the course [rad], airspeed,
-wind speed (=[Vtas]) and wind direction [rad]. The speeds need to use the same
-speed unit.
+Return the ground speed `Vground` [m/s] given the `course` [rad], airspeed
+`Vtas` [m/s], wind speed `Vwind`[m/s] and wind direction `∠wind` [rad]. The
+speeds need to use the same speed unit ([m/s] or [kts] or [km/h]).
 
-source: http://edwilliams.org/avform.htm
+source: edwilliams.org/avform.htm
 """
 function Vground(Vtas::Float64, Vwind::Float64, ∠wind::Float64, course::Float64)
     swc = (Vwind / Vtas) * sin(∠wind - course)
@@ -279,28 +298,37 @@ function Vground(Vtas::Float64, Vwind::Float64, ∠wind::Float64, course::Float6
 end
 
 """
-head_wind(Vwind::Float64, ∠wind::Float64, course::Float64)
+    head_wind(Vwind::Float64, ∠wind::Float64, course::Float64)
 
-Head-wind component. A tail-wind is a negative head-wind.
+Return the `head_wind` [m/s] component for a given wind speed `Vwind` [m/s],
+`course` [rad], and wind direction `∠wind` [rad]. A tail-wind is a negative
+head-wind.
+
+source: edwilliams.org/avform.htm
 """
 function head_wind(Vwind::Float64, ∠wind::Float64, course::Float64)
     return Vwind*cos(∠wind - course)
 end
 
 """
-cross_wind(Vwind::Float64, ∠wind::Float64, course::Float64)
+    cross_wind(Vwind::Float64, ∠wind::Float64, course::Float64)
 
-Cross-wind component. A positive cross-wind component indicates a wind from the
-right.
+Return the `cross_wind` [m/s] component for a given wind speed `Vwind` [m/s],
+`course` [rad], and wind direction `∠wind` [rad]. A positive cross-wind
+component indicates a wind from the right.
+
+source: edwilliams.org/avform.htm
 """
 function cross_wind(Vwind::Float64, ∠wind::Float64, course::Float64)
     return Vwind*sin(∠wind - course)
 end
 
 """
-normalize(value::Float64, lower::Float64 = 0.0, upper::Float64 = 360.0)
+    normalize(value::Float64[, lower::Float64 = 0.0, upper::Float64 = 360.0])
 
-Normalize a value to stay within the lower and upper limit:
+Normalize a `value` to stay within the `lower` and `upper` limit.
+
+Example:
 normalize(370.0, lower=0.0, upper=360.0)
 10.0
 """
