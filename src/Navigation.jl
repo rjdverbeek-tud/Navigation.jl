@@ -18,13 +18,9 @@ Implemented Functions:
 * Vground
 * head_wind
 * cross_wind
-* normalize
 
 Implemented Types:
 * Point(ϕ, λ)
-
-Implemented constants:
-* Rₑ_m    Radius Earth in [m]
 
 Based on
 source: www.movable-type.co.uk/scripts/latlong.html
@@ -137,11 +133,10 @@ function intermediate_point(pos₁::Point, pos₂::Point, fraction::Float64 = 0.
 end
 
 """
-    destination_point(start_pos::Point, distance::Float64, bearing::Float64
-[, radius::Float64=Rₑ_m])
+    destination_point(start_pos::Point, distance::Float64, bearing::Float64[, radius::Float64=Rₑ_m])
 
 Given a `start_pos` (Point), initial `bearing` [rad] (clockwise from North),
-`distance` [m], and the earth radius [m] calculate the `destina­tion_point`
+`distance` [m], and the earth `radius` [m] calculate the `destina­tion_point`
 (Point) travelling along a (shortest distance) great circle arc.
 (The distance must use the same radius as the radius of the earth.)
 
@@ -161,15 +156,14 @@ end
     bearing₂₃::Float64)
 
 Return the intersection point `pos₃` (Point) of two great circle paths given two
-start points (Point) `pos₁`` and `pos₂`` and two bearings [rad] from `pos₁` to
+start points (Point) `pos₁` and `pos₂` and two bearings [rad] from `pos₁` to
 `pos₃`, and from `pos₂` to `pos₃`.
 
 Under certain circumstances the results can be an ∞ or ambiguous solution.
 
 Source: edwilliams.org/avform.htm
 """
-function intersection_point(pos₁::Point, pos₂::Point, bearing₁₃::Float64,
-    bearing₂₃::Float64)
+function intersection_point(pos₁::Point, pos₂::Point, bearing₁₃::Float64, bearing₂₃::Float64)
     Δpos = pos₂ - pos₁
     δ₁₂ = 2asin(√(sin(Δpos.ϕ / 2)^2 + cos(pos₁.ϕ) * cos(pos₂.ϕ) * sin(Δpos.λ/2)^2))
     θₐ = acos((sin(pos₂.ϕ) - sin(pos₁.ϕ) * cos(δ₁₂)) / (sin(δ₁₂) * cos(pos₁.ϕ)))
@@ -201,8 +195,7 @@ function intersection_point(pos₁::Point, pos₂::Point, bearing₁₃::Float64
 end
 
 """
-    cross_track_distance(pos₁::Point, pos₂::Point, pos₃::Point[
-    , radius::Float64=Rₑ_m])
+    cross_track_distance(pos₁::Point, pos₂::Point, pos₃::Point[, radius::Float64=Rₑ_m])
 
 Return the `cross_track_distance` [m] from a point `pos₃` (Point) to a great
 circle path defined by the points `pos₁` and `pos₂` (Point).
@@ -218,8 +211,7 @@ function cross_track_distance(pos₁::Point, pos₂::Point, pos₃::Point,
 end
 
 """
-    cross_track_distance(pos₁::Point, bearing::Float64, pos₃::Point[
-    , radius::Float64=Rₑ_m])
+    cross_track_distance(pos₁::Point, bearing::Float64, pos₃::Point[, radius::Float64=Rₑ_m])
 
 Return the `cross_track_distance` [m] from a point `pos₃` (Point) to a great
 circle path defined by the point `pos₁` and `bearing` [rad].

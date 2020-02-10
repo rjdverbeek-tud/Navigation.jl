@@ -6,13 +6,6 @@ Order = [:module]
 Private = false
 ```
 
-## Constants
-```@autodocs
-Modules = [Navigation]
-Order = [:constant]
-Private = false
-```
-
 ## Types
 ```@docs
 Point
