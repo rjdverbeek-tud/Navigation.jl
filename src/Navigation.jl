@@ -133,7 +133,8 @@ function intermediate_point(pos₁::Point, pos₂::Point, fraction::Float64 = 0.
 end
 
 """
-    destination_point(start_pos::Point, distance::Float64, bearing::Float64[, radius::Float64=Rₑ_m])
+    destination_point(start_pos::Point, distance::Float64, bearing::Float64[,
+     radius::Float64=Rₑ_m])
 
 Given a `start_pos` (Point), initial `bearing` [rad] (clockwise from North),
 `distance` [m], and the earth `radius` [m] calculate the `destina­tion_point`
