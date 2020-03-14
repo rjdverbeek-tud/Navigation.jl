@@ -337,26 +337,14 @@ function normalize(value::Float64, lower::Float64 = 0.0, upper::Float64 = 360.0)
     return result
 end
 
-# """
-#     normalize(point::Point, type='deg')
-#
-# Normalize a `point` in degrees or radians.
-#
-# Example:
-# normalize(Point(-40.0, 190.0), type='deg')
-# Point(-40.0, -170.0)
-# """
-# function normalize(point::Point, type='deg')
-#     if type == 'deg'
-#         return Point(normalize(point.ϕ, lower=-90.0, upper=90.0),
-#         normalize(point.λ, lower=-180.0, upper=180.0))
-#     elseif type == 'rad'
-#         return Point(normalize(point.ϕ, lower=-π/2.0, upper=π/2.0),
-#         normalize(point.λ, lower=-π, upper=π))
-#     else
-#         return point
-#     end
-# end
+"""
+    normalize(point::Point, mode::String)
+
+Normalize a `point` in radians.
+"""
+function normalize(point::Point)
+    return Point(point.ϕ, normalize(point.λ, -π, π*1.0))
+end
 
 #TODO Closest point to the poles
 #TODO Crossing parallels

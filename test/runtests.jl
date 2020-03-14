@@ -40,8 +40,9 @@ using Test
     @test rad2deg(p2).λ ≈ 28.6479 atol = 0.0001
     @test deg2rad(p1).ϕ ≈ 0.0087 atol = 0.0001
     @test deg2rad(p2).λ ≈ 0.0087 atol = 0.0001
-    #
-    # p3 = Point(100.0, 190.0)
-    # @test Navigation.normalize(p3, type='deg').ϕ ≈ 80.0 atol = 0.1
-    # @test Navigation.normalize(p3, type='deg').λ ≈ -170.0 atol = 0.1
+
+    p3 = Point(80.0, 190.0)
+    p4 = deg2rad(p3)
+    @test Navigation.normalize(p4).ϕ ≈ 1.3962634016 atol = 0.0001
+    @test Navigation.normalize(p4).λ ≈ -2.96705972839 atol = 0.0001
 end
