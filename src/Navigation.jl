@@ -30,7 +30,7 @@ module Navigation
 
 import Base.-, Base.Math.rad2deg, Base.Math.deg2rad
 
-export Point, distance, bearing, final_bearing, midpoint,
+export Point, RouteSection, distance, bearing, final_bearing, midpoint,
 intermediate_point, Vground, destination_point, intersection_point,
 cross_track_distance, along_track_distance, head_wind, cross_wind
 
@@ -51,6 +51,12 @@ end
 (rad2deg)(x::Point) = Point(rad2deg(x.ϕ), rad2deg(x.λ))
 (deg2rad)(x::Point) = Point(deg2rad(x.ϕ), deg2rad(x.λ))
 
+"RouteSection type with start position pos₁ [Point] and end position pos₂ [Point]"
+struct RouteSection
+    pos₁::Point
+    pos₂::Point
+end
+
 """
     distance(pos₁::Point, pos₂::Point[, radius::Float64=Rₑ_m])
 
@@ -68,6 +74,18 @@ function distance(pos₁::Point, pos₂::Point, radius::Float64=Rₑ_m)
 end
 
 """
+    distance(section::RouteSection [, radius::Float64=Rₑ_m])
+
+Return the `distance` in [m] of the great circle line on the route section on a
+sphere, with a given `radius`, calculated using the haversine formula. The
+haversine gives also good estimations at short distances.
+
+Source: www.movable-type.co.uk/scripts/latlong.html
+"""
+distance(section::RouteSection, radius::Float64=Rₑ_m) = distance(section.pos₁,
+section.pos₂, radius)
+
+"""
     bearing(pos₁::Point, pos₂::Point)
 
 Return the initial `bearing` [rad] of the great circle line between the
@@ -82,6 +100,15 @@ function bearing(pos₁::Point, pos₂::Point)
 end
 
 """
+    bearing(section::RouteSection)
+
+Return the initial `bearing` [rad] of the route section on a sphere.
+
+Source: www.movable-type.co.uk/scripts/latlong.html
+"""
+bearing(section::RouteSection) = bearing(section.pos₁, section.pos₂)
+
+"""
     final_bearing(pos₁::Point, pos₂::Point)
 
 Return the `final_bearing` [rad] of the great circle line between the positions
@@ -92,6 +119,15 @@ Source: www.movable-type.co.uk/scripts/latlong.html
 function final_bearing(pos₁::Point, pos₂::Point)
     return mod2pi(bearing(pos₂, pos₁) + π)
 end
+
+"""
+    final_bearing(section::RouteSection)
+
+Return the `final_bearing` [rad] of the route section on a sphere.
+
+Source: www.movable-type.co.uk/scripts/latlong.html
+"""
+final_bearing(section::RouteSection) = final_bearing(section.pos₁, section.pos₂)
 
 """
     midpoint(pos₁::Point, pos₂::Point)
@@ -109,6 +145,15 @@ function midpoint(pos₁::Point, pos₂::Point)
     λₘ = pos₁.λ + atan(By, cos(pos₁.ϕ) + Bx)
     return Point(ϕₘ, normalize(λₘ, -π, Float64(π)))
 end
+
+"""
+    midpoint(section::RouteSection)
+
+Return the half-way point `midpoint` (Point) on the route section on a sphere.
+
+Source: www.movable-type.co.uk/scripts/latlong.html
+"""
+midpoint(section::RouteSection) = midpoint(section.pos₁, section.pos₂)
 
 """
     intermediate_point(pos₁::Point, pos₂::Point[, fraction::Float64 = 0.5])
@@ -131,6 +176,18 @@ function intermediate_point(pos₁::Point, pos₂::Point, fraction::Float64 = 0.
     λᵢ = atan(y, x)
     return Point(ϕᵢ, λᵢ)
 end
+
+"""
+    intermediate_point(section::RouteSection [, fraction::Float64 = 0.5])
+
+Return the `intermediate_point` (Point) at any `fraction` along the route
+section. The fraction along the great circle route is such that `fraction` =
+0.0 is at `pos₁` and `fraction` 1.0 is at `pos₂`.
+
+Source: www.movable-type.co.uk/scripts/latlong.html
+"""
+intermediate_point(section::RouteSection, fraction::Float64 = 0.5) =
+intermediate_point(section.pos₁, section.pos₂, fraction)
 
 """
     destination_point(start_pos::Point, distance::Float64, bearing::Float64[,
@@ -210,6 +267,18 @@ function cross_track_distance(pos₁::Point, pos₂::Point, pos₃::Point,
     bearing₁₂ = bearing(pos₁, pos₂)
     return cross_track_distance(∠distance₁₃, bearing₁₂, bearing₁₃, radius)
 end
+
+"""
+    cross_track_distance(section::RouteSection, pos₃::Point [,
+    radius::Float64=Rₑ_m])
+
+Return the `cross_track_distance` [m] from a point `pos₃` (Point) to a route
+section.
+
+Source: www.movable-type.co.uk/scripts/latlong.html
+"""
+cross_track_distance(section::RouteSection, pos₃::Point, radius::Float64=Rₑ_m) =
+cross_track_distance(section.pos₁, section.pos₂, pos₃, radius=radius)
 
 """
     cross_track_distance(pos₁::Point, bearing::Float64, pos₃::Point[, radius::Float64=Rₑ_m])

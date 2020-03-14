@@ -4,7 +4,10 @@ using Test
 @testset "Navigation.jl" begin
     p1 = Point(0.5, 1.0)
     p2 = Point(1.0, 0.5)
+    rs = RouteSection(p1,p2)
+
     @test distance(p1, p2) ≈ 3888e3 atol = 1e3
+    @test distance(rs) ≈ 3888e3 atol = 1e3
     @test bearing(p1, p2) ≈ 5.81412807071 atol = 0.001
     @test final_bearing(p1, p2) ≈ 5.45864813531 atol = 0.001
     @test midpoint(p1, p2).λ ≈ 0.8106650896663075 atol = 0.0001
