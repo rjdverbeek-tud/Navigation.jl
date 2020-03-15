@@ -278,7 +278,7 @@ section.
 Source: www.movable-type.co.uk/scripts/latlong.html
 """
 cross_track_distance(section::RouteSection, pos₃::Point, radius::Float64=Rₑ_m) =
-cross_track_distance(section.pos₁, section.pos₂, pos₃, radius=radius)
+cross_track_distance(section.pos₁, section.pos₂, pos₃, radius)
 
 """
     cross_track_distance(pos₁::Point, bearing::Float64, pos₃::Point[, radius::Float64=Rₑ_m])

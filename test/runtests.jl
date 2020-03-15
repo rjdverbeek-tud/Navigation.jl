@@ -9,11 +9,17 @@ using Test
     @test distance(p1, p2) ≈ 3888e3 atol = 1e3
     @test distance(rs) ≈ 3888e3 atol = 1e3
     @test bearing(p1, p2) ≈ 5.81412807071 atol = 0.001
+    @test bearing(rs) ≈ 5.81412807071 atol = 0.001
     @test final_bearing(p1, p2) ≈ 5.45864813531 atol = 0.001
+    @test final_bearing(rs) ≈ 5.45864813531 atol = 0.001
     @test midpoint(p1, p2).λ ≈ 0.8106650896663075 atol = 0.0001
     @test midpoint(p1, p2).ϕ ≈ 0.76484691145 atol = 0.0001
+    @test midpoint(rs).λ ≈ 0.8106650896663075 atol = 0.0001
+    @test midpoint(rs).ϕ ≈ 0.76484691145 atol = 0.0001
     @test intermediate_point(p1, p2, 0.5).λ ≈ 0.8106650896663075 atol = 0.0001
     @test intermediate_point(p1, p2, 0.5).ϕ ≈ 0.76484691145 atol = 0.0001
+    @test intermediate_point(rs, 0.5).λ ≈ 0.8106650896663075 atol = 0.0001
+    @test intermediate_point(rs, 0.5).ϕ ≈ 0.76484691145 atol = 0.0001
 
     dst = 3888000.0
     brg = 5.81412807071
@@ -27,8 +33,10 @@ using Test
 
     p1b = deg2rad(Point(30.0, 100.0))
     p2b = deg2rad(Point(50.0, 210.0))
+    rsb = RouteSection(p1b, p2b)
     p3b = deg2rad(Point(40.0, 180.0))
     @test cross_track_distance(p1b, p2b, p3b, 1.0) ≈ 0.297182506587 atol = 0.00001
+    @test cross_track_distance(rsb, p3b, 1.0) ≈ 0.297182506587 atol = 0.00001
     @test along_track_distance(p1b, p2b, p3b, 1.0) ≈ 1.09661554384 atol = 0.00001
 
     @test Vground(110.0, 40.0, deg2rad(315.0), deg2rad(245.0)) ≈ 89.7 atol = 0.1
