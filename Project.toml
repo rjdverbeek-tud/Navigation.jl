@@ -1,7 +1,7 @@
 name = "Navigation"
 uuid = "cc87a3b2-3706-4f35-b5b4-b2c85061916d"
 authors = ["René Verbeek"]
-version = "0.2.5"
+version = "0.3.0"
 
 [compat]
 julia = "1.3"
