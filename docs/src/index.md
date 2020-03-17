@@ -8,7 +8,8 @@ Private = false
 
 ## Types
 ```@docs
-Point
+Point_rad
+Point_deg
 ```
 
 ## Functions
