@@ -6,7 +6,7 @@ export midpoint, intermediate_point, destination_point, intersection_point
 Return the half-way point `midpoint` (Point) on the great circle line between
 the positions `pos₁` and `pos₂` on a sphere.
 
-Point = Point_deg or Point_rad
+Point = Navigation.Point_deg or Navigation.Point_rad
 
 Source: www.movable-type.co.uk/scripts/latlong.html
 """
@@ -39,7 +39,7 @@ path between two points with positions `pos₁` and `pos₂`. The fraction along
 great circle route is such that `fraction` = 0.0 is at `pos₁` and `fraction` 1.0
 is at `pos₂`.
 
-Point = Point_deg or Point_rad
+Point = Navigation.Point_deg or Navigation.Point_rad
 
 Source: www.movable-type.co.uk/scripts/latlong.html
 """
@@ -80,7 +80,7 @@ Given a `start_pos` (Point), initial `bearing` (clockwise from North),
 (Point) travelling along a (shortest distance) great circle arc.
 (The distance must use the same radius as the radius of the earth.)
 
-Point = Point_deg or Point_rad
+Point = Navigation.Point_deg or Navigation.Point_rad
 (if Point_deg then the initial bearing must also be in degrees,
 and if Point_rad then the intial bearing must be in radians)
 
@@ -108,7 +108,7 @@ Return the intersection point `pos₃` (Point) of two great circle paths given t
 start points (Point) `pos₁` and `pos₂` and two bearings from `pos₁` to
 `pos₃`, and from `pos₂` to `pos₃`.
 
-Point = Point_deg or Point_rad
+Point = Navigation.Point_deg or Navigation.Point_rad
 (if Point_deg then the initial bearings must also be in degrees,
 and if Point_rad then the intial bearings must be in radians)
 

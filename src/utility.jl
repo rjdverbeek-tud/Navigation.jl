@@ -8,7 +8,7 @@ Source: en.wikipedia.org/wiki/Earth_radius
 const Rₑ_m = 6371008.7714
 
 """
-Point type with latitude `ϕ` and longitude `λ` [rad]
+Point type with latitude `ϕ` [rad] and longitude `λ` [rad]
 """
 struct Point_rad{T<:Float64}
     ϕ::T

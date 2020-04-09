@@ -6,7 +6,7 @@ export bearing, final_bearing
 Return the initial `bearing` of the great circle line between the
 positions `pos₁` and `pos₂` on a sphere.
 
-Point = Point_deg or Point_rad
+Point = Navigation.Point_deg or Navigation.Point_rad
 
 Source: www.movable-type.co.uk/scripts/latlong.html
 """
@@ -24,7 +24,7 @@ deg2rad(pos₂)))
 
 Return the initial `bearing` [rad] of the route section on a sphere.
 
-Point = Point_deg or Point_rad
+Point = Navigation.Point_deg or Navigation.Point_rad
 
 Source: www.movable-type.co.uk/scripts/latlong.html
 """
@@ -36,7 +36,7 @@ bearing(section::RouteSection) = bearing(section.pos₁, section.pos₂)
 Return the `final_bearing` of the great circle line between the positions
 `pos₁` and `pos₂` on a sphere.
 
-Point = Point_deg or Point_rad
+Point = Navigation.Point_deg or Navigation.Point_rad
 
 Source: www.movable-type.co.uk/scripts/latlong.html
 """

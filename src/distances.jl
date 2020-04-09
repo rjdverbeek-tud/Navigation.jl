@@ -7,7 +7,7 @@ Return the `distance` in [m] of the great circle line between the positions `pos
 and `pos₂` on a sphere, with a given `radius`, calculated using the haversine
 formula. The haversine gives also good estimations at short distances.
 
-Point = Point_deg or Point_rad
+Point = Navigation.Point_deg or Navigation.Point_rad
 
 Source: www.movable-type.co.uk/scripts/latlong.html
 """
@@ -39,7 +39,7 @@ section.pos₂, radius)
 Return the `cross_track_distance` [m] from a point `pos₃` (Point) to a great
 circle path defined by the points `pos₁` and `pos₂` (Point).
 
-Point = Point_deg or Point_rad
+Point = Navigation.Point_deg or Navigation.Point_rad
 
 Source: www.movable-type.co.uk/scripts/latlong.html
 """

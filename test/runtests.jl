@@ -9,6 +9,8 @@ using Test
     rs = RouteSection(p1,p2)
     rsdeg = RouteSection(p1deg, p2deg)
 
+    @test (p1deg-p2deg).ϕ ≈ -28.6478897565 atol = 0.001
+
     @test distance(p1, p2) ≈ 3888e3 atol = 1e3
     @test distance(rs) ≈ 3888e3 atol = 1e3
     @test distance(p1deg, p2deg) ≈ 3888e3 atol = 1e3
@@ -52,6 +54,11 @@ using Test
     brg13 = 0.5
     brg23 = 1.5
     @test intersection_point(p1, p2, brg13, brg23).ϕ ≈ 0.86121333 atol = 0.001
+    @test intersection_point(p2, p1, brg13, brg23).ϕ ≈ -0.290965779 atol = 0.001
+    brg13_ambiguous = 2.61799387799
+    @test isinf(intersection_point(p2, p1, brg13_ambiguous, brg23).ϕ) == true
+
+
     @test intersection_point(p1, p2, brg13, brg23).λ ≈ 1.31431535 atol = 0.001
     @test intersection_point(p1deg, p2deg, rad2deg(brg13), rad2deg(brg23)).ϕ ≈ rad2deg(0.86121333) atol = 0.001
     @test intersection_point(p1deg, p2deg, rad2deg(brg13), rad2deg(brg23)).λ ≈ rad2deg(1.31431535) atol = 0.001
@@ -60,15 +67,21 @@ using Test
     p1bdeg = Point_deg(30.0, 100.0)
     p2bdeg = Point_deg(50.0, 210.0)
     rsbdeg = RouteSection(p1bdeg, p2bdeg)
+    rsb = deg2rad(rsbdeg)
+    rsbdeg = rad2deg(rsb)
     p3bdeg = Point_deg(40.0, 180.0)
     p1b = deg2rad(p1bdeg)
     p2b = deg2rad(p2bdeg)
     p3b = deg2rad(p3bdeg)
-    rsb = RouteSection(p1b, p2b)
+    # rsb = RouteSection(p1b, p2b)
     @test cross_track_distance(p1b, p2b, p3b, 1.0) ≈ 0.297182506587 atol = 0.00001
     @test cross_track_distance(rsb, p3b, 1.0) ≈ 0.297182506587 atol = 0.00001
     @test along_track_distance(p1b, p2b, p3b, 1.0) ≈ 1.09661554384 atol = 0.00001
     @test cross_track_distance(p1bdeg, p2bdeg, p3bdeg, 1.0) ≈ 0.297182506587 atol = 0.00001
+    p1p2bearing_deg = bearing(p1bdeg, p2bdeg)
+    p1p2bearing = bearing(p1b, p2b)
+    @test cross_track_distance(p1bdeg, p1p2bearing_deg, p3bdeg, 1.0) ≈ 0.297182506587 atol = 0.00001
+    @test cross_track_distance(p1b, p1p2bearing, p3b, 1.0) ≈ 0.297182506587 atol = 0.00001
     @test cross_track_distance(rsbdeg, p3bdeg, 1.0) ≈ 0.297182506587 atol = 0.00001
     @test along_track_distance(p1bdeg, p2bdeg, p3bdeg, 1.0) ≈ 1.09661554384 atol = 0.00001
 
@@ -90,4 +103,5 @@ using Test
     p4 = deg2rad(p3)
     @test Navigation.normalize(p4).ϕ ≈ 1.3962634016 atol = 0.0001
     @test Navigation.normalize(p4).λ ≈ -2.96705972839 atol = 0.0001
+    @test Navigation.normalize(p3).λ ≈ -170.000 atol = 0.01
 end
