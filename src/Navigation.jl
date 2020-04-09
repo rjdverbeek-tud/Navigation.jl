@@ -15,12 +15,18 @@ Implemented Functions:
 * destination_point
 * intersection_point
 * along_track_distance
+* cross_track_distance
 * Vground
 * head_wind
 * cross_wind
+* normalize
 
 Implemented Types:
-* Point(ϕ, λ)
+* Point_rad(ϕ, λ)
+* Point_deg(ϕ, λ)
+
+Implemented constants:
+* Rₑ_m    Radius Earth in [m]
 
 Based on
 source: www.movable-type.co.uk/scripts/latlong.html
