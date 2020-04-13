@@ -58,15 +58,17 @@ function normalize(value::Float64, lower::Float64 = 0.0, upper::Float64 = 360.0)
     return result
 end
 
+#TODO Get a more efficient way to normalize latitude
 """
-    normalize(point::Point, mode::String)
+    normalize(point::Point_rad)
+    normalize(point::Point_deg)
 
 Normalize a `point`.
 """
 function normalize(point::Point_rad)
-    return Point_rad(point.ϕ, normalize(point.λ, -π, π*1.0))
+    return Point_rad(asin(sin(point.ϕ)), normalize(point.λ, -π, π*1.0))
 end
 
 function normalize(point::Point_deg)
-    return Point_deg(point.ϕ, normalize(point.λ, -180.0, 180.0))
+    return rad2deg(normalize(deg2rad(point)))
 end
