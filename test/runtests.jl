@@ -110,4 +110,42 @@ using Test
     @test Navigation.normalize(p4).ϕ ≈ 1.3962634016 atol = 0.0001
     @test Navigation.normalize(p4).λ ≈ -2.96705972839 atol = 0.0001
     @test Navigation.normalize(p3).λ ≈ -170.000 atol = 0.01
+
+    @test opposite_point(p1).ϕ ≈ -0.5 atol = 0.0001
+    @test opposite_point(p1).λ ≈ -2.14159265359 atol = 0.0001
+    @test opposite_point(p1deg).ϕ ≈ -28.6478897565 atol = 0.0001
+    @test opposite_point(p1deg).λ ≈ -122.704220487 atol = 0.0001
+    @test max_latitude_deg(0.0, 45.0) ≈ 45.0 atol = 0.0001
+    @test max_latitude_rad(1.0, π/2.0) ≈ 1.0 atol = 0.0001
+    @test max_latitude_rad(1.0, 0.0) ≈ π/2.0 atol = 0.0001
+    @test max_latitude_rad(-1.0, 0.0) ≈ π/2.0 atol = 0.0001
+    @test max_latitude_rad(-1.0, 1.0*π) ≈ π/2.0 atol = 0.0001
+
+    p5 = Point_deg(45.0, 45.0)
+    @test closest_point_to_pole(p5, 45.0).ϕ ≈ 60.0 atol = 0.001
+    @test closest_point_to_pole(p5, 45.0).λ ≈ 99.73561 atol = 0.001
+    @test closest_point_to_pole(p5, 89.0).ϕ ≈ 45.00873 atol = 0.001
+    @test closest_point_to_pole(p5, 89.0).λ ≈ 46.41407 atol = 0.001
+    @test closest_point_to_pole(p5, 135.0).ϕ ≈ -60.0 atol = 0.001
+    @test closest_point_to_pole(p5, 135.0).λ ≈ 170.2644 atol = 0.001
+    @test closest_point_to_pole(p5, -135.0).ϕ ≈ -60.0 atol = 0.001
+    @test closest_point_to_pole(p5, -135.0).λ ≈ -80.2644 atol = 0.001
+    @test closest_point_to_pole(p5, -89.0).ϕ ≈ 45.00873 atol = 0.001
+    @test closest_point_to_pole(p5, -89.0).λ ≈ 43.58593 atol = 0.001
+    @test closest_point_to_pole(p5, -45.0).ϕ ≈ 60.0 atol = 0.001
+    @test closest_point_to_pole(p5, -45.0).λ ≈ -9.73561 atol = 0.001
+
+    p6 = Point_deg(-45.0, 45.0)
+    @test closest_point_to_pole(p6, 45.0).ϕ ≈ 60.0 atol = 0.001
+    @test closest_point_to_pole(p6, 45.0).λ ≈ 170.2644 atol = 0.001
+    @test closest_point_to_pole(p6, 91.0).ϕ ≈ -45.00873 atol = 0.001
+    @test closest_point_to_pole(p6, 91.0).λ ≈ 46.41407 atol = 0.001
+    @test closest_point_to_pole(p6, 135.0).ϕ ≈ -60.0 atol = 0.001
+    @test closest_point_to_pole(p6, 135.0).λ ≈ 99.73561 atol = 0.001
+    @test closest_point_to_pole(p6, -135.0).ϕ ≈ -60.0 atol = 0.001
+    @test closest_point_to_pole(p6, -135.0).λ ≈ -9.73561 atol = 0.001
+    @test closest_point_to_pole(p6, -91.0).ϕ ≈ -45.00873 atol = 0.001
+    @test closest_point_to_pole(p6, -91.0).λ ≈ 43.58593 atol = 0.001
+    @test closest_point_to_pole(p6, -45.0).ϕ ≈ 60.0 atol = 0.001
+    @test closest_point_to_pole(p6, -45.0).λ ≈ -80.2644 atol = 0.001
 end

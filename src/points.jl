@@ -1,4 +1,5 @@
-export midpoint, intermediate_point, destination_point, intersection_point
+export midpoint, intermediate_point, destination_point, intersection_point,
+max_latitude_rad, max_latitude_deg, opposite_point, closest_point_to_pole
 
 """
     midpoint(pos₁::Point, pos₂::Point)
@@ -152,26 +153,28 @@ intersection_point(pos₁::Point_deg, pos₂::Point_deg, bearing₁₃::Float64,
 bearing₂₃::Float64) = rad2deg(intersection_point(deg2rad(pos₁), deg2rad(pos₂),
 deg2rad(bearing₁₃), deg2rad(bearing₂₃)))
 
-#TODO More efficient solution?
 """
-Using Clairaut's formula it is possible to calculate the maximum latitude
-of a great circle path, give a bearing `θ` and latitude `ϕ` on the great circle.
+closest_point_to_pole(point::Point_rad, bearing_rad::Float64)
+closest_point_to_pole(point::Point_deg, bearing_deg::Float64)
 
-The bearing must use the same unit (e.g. rad or deg) as the point
+Given a starting point [Point_rad] and initial bearing [rad] calculate the
+closest point to the next pole encountered.
 
 Source: https://www.movable-type.co.uk/scripts/latlong.html
 #TODO Source for longitude
 """
-function closest_point_to_pole(point::Point_rad, bearing_rad::Float64)
-    max_lat_rad = max_latitude_rad(point.ϕ, bearing_rad)
-    max_lon_rad = point.λ + atan(1.0, tan(bearing_rad)sin(point.ϕ))
-    if 0.5*π < normalize(bearing_rad, 0.0, 2.0*π) < 1.0*π ||
-        1.5*π < normalize(bearing_rad, 0.0, 2.0*π) < 2.0*π # Going South
-        return normalize(Point_rad(-max_lat_rad, max_lon_rad))
-    else  # Going North
-        return normalize(Point_rad(max_lat_rad, max_lon_rad))
-    end
+function closest_point_to_pole(point_rad::Point_rad, bearing_rad::Float64)
+    pnt = normalize(point_rad)
+    brg = normalize(bearing_rad, -1.0*π, 1.0*π)
+    max_lat = max_latitude_rad(pnt.ϕ, brg)
+    max_lon = pnt.λ + atan(1.0, tan(brg)sin(pnt.ϕ))
+    # println(brg, " ", max_lon-π*(brg<0.0))
+    return normalize(Point_rad(max_lat*(-π*0.5≤brg≤π*0.5 ? 1.0 : -1.0),
+    max_lon-π*(brg<0.0)))
 end
+
+closest_point_to_pole(point::Point_deg, bearing_deg::Float64) =
+rad2deg(closest_point_to_pole(deg2rad(point), deg2rad(bearing_deg)))
 
 """
 max_latitude_rad(lat_rad::Float64, bearing_rad::Float64)
@@ -199,14 +202,14 @@ The minimum latitude is -max_latitude_deg
 
 Source: https://www.movable-type.co.uk/scripts/latlong.html
 """
-max_latitude_deg(lat_deg::Float64, bearing_deg::Float64) = max_latitude_rad(
-deg2rad(lat_deg), deg2rad(bearing_deg))
+max_latitude_deg(lat_deg::Float64, bearing_deg::Float64) = rad2deg(max_latitude_rad(
+deg2rad(lat_deg), deg2rad(bearing_deg)))
 
 """
 opposite_point(point::Point_rad)
 opposite_point(point::Point_deg)
 
-Opposite point
+The point at the opposite site of the Earth.
 """
 function opposite_point(point::Point_rad)
     normalize(Point_rad(-point.ϕ, point.λ+π))

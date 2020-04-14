@@ -23,6 +23,7 @@ Implemented Functions:
 * head_wind
 * cross_wind
 * normalize
+* closest_point_to_pole
 
 Implemented Types:
 * Point_rad(ϕ, λ)
