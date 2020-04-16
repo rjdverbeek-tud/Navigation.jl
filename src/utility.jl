@@ -1,5 +1,7 @@
 export Point_rad, Point_deg, RouteSection
 
+import Base:(convert)
+
 """
     Radius Earth [m]
 
@@ -26,6 +28,9 @@ end
 
 (-)(x::Point_deg, y::Point_deg) = Point_deg(x.ϕ - y.ϕ, x.λ - y.λ)
 (deg2rad)(x::Point_deg) = Point_rad(deg2rad(x.ϕ), deg2rad(x.λ))
+
+Base.:convert(type::Type{Point_deg}, x::Point_rad) = rad2deg(x)
+Base.:convert(type::Type{Point_rad}, x::Point_deg) = deg2rad(x)
 
 "RouteSection type with start position pos₁ [Point_deg] / [Point_rad] and end position pos₂
 [Point_deg] / [Point_rad]"
