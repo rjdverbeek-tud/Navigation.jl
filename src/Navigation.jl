@@ -20,7 +20,7 @@ Implemented Functions:
 * head_wind
 * cross_wind
 * normalize
-* closest_point_to_poles
+* closest_point_to_pole
 
 Implemented Types:
 * Point_rad(ϕ, λ)
@@ -38,12 +38,13 @@ module Navigation
 import Base.-, Base.Math.rad2deg, Base.Math.deg2rad
 
 include("utility.jl")
+include("network.jl")
 include("distances.jl")
 include("bearings.jl")
 include("points.jl")
 include("wind.jl")
 
-#TODO Closest point to the poles
+
 #TODO Crossing parallels
 #TODO Rhumb lines
 

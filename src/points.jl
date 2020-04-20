@@ -137,7 +137,8 @@ function intersection_point(pos₁::Point_rad, pos₂::Point_rad, bearing₁₃:
     if sin(α₁) ≈ 0.0 && sin(α₂) ≈ 0.0
         return Point_rad(Inf, Inf)  # infinity of intersections
     elseif sin(α₁) * sin(α₂) < 0.0
-        return Point_rad(Inf, Inf)  # intersection ambiguous
+        # return Point_rad(Inf, Inf)  # intersection ambiguous
+        return Point_rad(NaN, NaN)
     else
         α₃ = acos(-cos(α₁) * cos(α₂) + sin(α₁) * sin(α₂) * cos(δ₁₂))
         δ₁₃ = atan(sin(δ₁₂) * sin(α₁) * sin(α₂), cos(α₂) + cos(α₁) * cos(α₃))
@@ -152,6 +153,25 @@ end
 intersection_point(pos₁::Point_deg, pos₂::Point_deg, bearing₁₃::Float64,
 bearing₂₃::Float64) = rad2deg(intersection_point(deg2rad(pos₁), deg2rad(pos₂),
 deg2rad(bearing₁₃), deg2rad(bearing₂₃)))
+
+function intersection_point(pos₁::Point_rad, pos₂::Point_rad, pos₃::Point_rad,
+    pos₄::Point_rad)
+    inter_pnt = intersection_point(pos₁, pos₃, bearing(pos₁, pos₂),
+    bearing(pos₃, pos₄))
+    if distance(pos₁, pos₂) ≥ distance(pos₁, inter_pnt) && distance(pos₃, pos₄) ≥ distance(pos₃, inter_pnt)
+        return inter_pnt
+    else
+        return Point_rad(NaN, NaN)
+    end
+end
+
+intersection_point(pos₁::Point_deg, pos₂::Point_deg, pos₃::Point_deg,
+    pos₄::Point_deg) = rad2deg(intersection_point(deg2rad(pos₁), deg2rad(pos₂),
+    deg2rad(pos₃), deg2rad(pos₄)))
+
+function intersection_point(pos₁::Point_deg, pos₂::Point_deg, airspace::Airspace)
+    println(airspace.bounding_box)
+end
 
 """
 closest_point_to_pole(point::Point_rad, bearing_rad::Float64)
