@@ -1,7 +1,7 @@
 """
 Calculate distances, angles, speeds and points for aviation navigation purposes.
 
-All angles are in radians, distances are standard in meters, and speeds are
+All angles are in degrees, distances are standard in meters, and speeds are
 standard in m/s.
 
 These methods are not to be used for operational purposes.
@@ -23,8 +23,7 @@ Implemented Functions:
 * closest_point_to_pole
 
 Implemented Types:
-* Point_rad(ϕ, λ)
-* Point_deg(ϕ, λ)
+* Point(ϕ, λ)
 
 Implemented constants:
 * Rₑ_m    Radius Earth in [m]
@@ -38,12 +37,11 @@ module Navigation
 import Base.-, Base.Math.rad2deg, Base.Math.deg2rad
 
 include("utility.jl")
-include("network.jl")
+# include("network.jl")
 include("distances.jl")
 include("bearings.jl")
 include("points.jl")
 include("wind.jl")
-
 
 #TODO Crossing parallels
 #TODO Rhumb lines
