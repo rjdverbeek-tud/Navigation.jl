@@ -27,15 +27,14 @@ Implemented Functions:
 * TBD sector
 
 Implemented Types:
-* Point_rad(ϕ, λ)
-* Point_deg(ϕ, λ)
+* Point(ϕ, λ)
 
 Implemented constants:
 * Rₑ_m    Radius Earth in [m]
 
 The calculations are done using the Point struct for specifying points as radians
 
-All angles are radians, distances are in meters, and speeds are in m/s.
+All angles are in degrees, distances are in meters, and speeds are in m/s.
 
 Source: https://www.movable-type.co.uk/scripts/latlong.html
 Source: http://edwilliams.org/avform.htm
