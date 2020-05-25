@@ -8,6 +8,7 @@ These methods are not to be used for operational purposes.
 
 Implemented Functions:
 * distance
+* angular_distance
 * bearing
 * final_bearing
 * midpoint
@@ -28,9 +29,9 @@ Implemented Types:
 Implemented constants:
 * Rₑ_m    Radius Earth in [m]
 
-Based on
-source: www.movable-type.co.uk/scripts/latlong.html
-source: edwilliams.org/avform.htm
+Based on:
+* source: www.movable-type.co.uk/scripts/latlong.html
+* source: edwilliams.org/avform.htm
 """
 module Navigation
 

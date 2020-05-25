@@ -3,7 +3,7 @@ export bearing, final_bearing
 """
     bearing(pos₁::Point, pos₂::Point)
 
-Return the initial `bearing` of the great circle line between the
+Return the initial `bearing` [deg] of the great circle line between the
 positions `pos₁` and `pos₂` [deg] on a sphere.
 
 Source: www.movable-type.co.uk/scripts/latlong.html
@@ -26,7 +26,7 @@ bearing(section::RouteSection) = bearing(section.pos₁, section.pos₂)
 """
     final_bearing(pos₁::Point, pos₂::Point)
 
-Return the `final_bearing` of the great circle line between the positions
+Return the `final_bearing` [deg] of the great circle line between the positions
 `pos₁` and `pos₂` [deg] on a sphere.
 
 Source: www.movable-type.co.uk/scripts/latlong.html
@@ -38,7 +38,7 @@ end
 """
     final_bearing(section::RouteSection)
 
-Return the `final_bearing` [rad] of the route section on a sphere.
+Return the `final_bearing` [deg] of the route section on a sphere.
 
 Source: www.movable-type.co.uk/scripts/latlong.html
 """

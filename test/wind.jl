@@ -5,5 +5,4 @@
 
         @test head_wind(20.0, 60.0, 30.0) ≈ 17.32 atol = 0.01
         @test cross_wind(20.0, 60.0, 30.0) ≈ 10.00 atol = 0.01
-
 end

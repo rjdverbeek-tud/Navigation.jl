@@ -21,7 +21,7 @@ end
 """
     midpoint(section::RouteSection)
 
-Return the half-way point `midpoint` (Point) on the route section on a sphere.
+Return the half-way point `midpoint` [deg] on the route section on a sphere.
 
 Source: www.movable-type.co.uk/scripts/latlong.html
 """
@@ -83,14 +83,13 @@ function destination_point(start_pos::Point, distance::Float64,
 end
 
 """
-    intersection_point(pos₁::Point, pos₂::Point, bearing₁₃::Float64,
-    bearing₂₃::Float64)
+    intersection_point(pos₁::Point, pos₂::Point, bearing₁₃::Float64, bearing₂₃::Float64)
 
 Return the intersection point `pos₃` [deg] of two great circle paths given two
-start points [deg] `pos₁` and `pos₂` and two bearings [deg] from `pos₁` to
-`pos₃`, and from `pos₂` to `pos₃`.
+start points [deg] `pos₁` and `pos₂` [deg] and two bearings [deg] from `pos₁` to
+`pos₃` [deg], and from `pos₂` to `pos₃` [deg].
 
-Under certain circumstances the results can be an ∞ or ambiguous solution.
+Under certain circumstances the results can be an ∞ or *ambiguous solution*.
 
 Source: edwilliams.org/avform.htm
 """
@@ -142,17 +141,17 @@ end
 #     println(airspace.bounding_box)
 # end
 
-"""
-closest_point_to_pole(point::Point, bearing::Float64)
-
-Given a starting point [deg] and initial bearing [deg] calculate the
-closest point to the next pole encountered.
-
-Source: https://www.movable-type.co.uk/scripts/latlong.html
 #TODO Source for longitude
 """
-function closest_point_to_pole(point::Point, bearing::Float64)
-    pnt = normalize(point)
+closest_point_to_pole(starting_point::Point, bearing::Float64)
+
+Given a `starting_point` [deg] and initial `bearing` [deg] calculate the
+closest point [deg] to the next pole encountered.
+
+Source: https://www.movable-type.co.uk/scripts/latlong.html
+"""
+function closest_point_to_pole(starting_point::Point, bearing::Float64)
+    pnt = normalize(starting_point)
     brg = normalize(bearing, -180.0, 180.0)
     max_lat = max_latitude(pnt.ϕ, brg)
     max_lon = pnt.λ + atand(1.0, tand(brg)sind(pnt.ϕ))
@@ -161,24 +160,24 @@ function closest_point_to_pole(point::Point, bearing::Float64)
 end
 
 """
-max_latitude(lat::Float64, bearing::Float64)
+max_latitude(latitude::Float64, bearing::Float64)
 
 Using Clairaut's formula it is possible to calculate the maximum latitude [deg]
-of a great circle path, give a bearing `bearing` [deg] and latitude
-`lat` [deg] on the great circle.
+of a great circle path, given a `bearing` [deg] and `latitude` [deg] on the
+great circle.
 
 The minimum latitude is -max_latitude
 
 Source: https://www.movable-type.co.uk/scripts/latlong.html
 """
-function max_latitude(lat::Float64, bearing::Float64)
-    return acosd(abs(sind(bearing)cosd(lat)))
+function max_latitude(latitude::Float64, bearing::Float64)
+    return acosd(abs(sind(bearing)cosd(latitude)))
 end
 
 """
 opposite_point(point::Point)
 
-The point at the opposite site of the Earth.
+The point at the opposite site of the Sphere.
 """
 function opposite_point(point::Point)
     normalize(Point(-point.ϕ, point.λ+180.0))
