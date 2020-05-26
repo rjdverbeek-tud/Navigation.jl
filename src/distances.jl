@@ -3,7 +3,7 @@ export distance, angular_distance, cross_track_distance, along_track_distance
 """
     distance(pos₁::Point, pos₂::Point[, radius::Float64=Rₑ_m])
 
-Return the `distance` in [m] of the great circle line between the positions `pos₁`
+Return the `distance` [m] of the great circle line between the positions `pos₁`
 [deg] and `pos₂` [deg] on a sphere, with an optionally given `radius`.
 
 Source: www.movable-type.co.uk/scripts/latlong.html
@@ -18,9 +18,8 @@ end
 """
     distance(section::RouteSection [, radius::Float64=Rₑ_m])
 
-Return the `distance` in [m] of the great circle line on the route section on a
-sphere, with a given `radius`, calculated using the haversine formula. The
-haversine gives also good estimations at short distances.
+Return the `distance` [m] of the great circle line on the route section on a
+sphere, with an optionally given `radius`.
 
 Source: www.movable-type.co.uk/scripts/latlong.html
 """

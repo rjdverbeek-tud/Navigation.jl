@@ -39,6 +39,12 @@
     p4ni2 = Point(49.0, 20.0)
     @test isnan(intersection_point(p1ni, p2ni, p3ni, p4ni2).λ)
 
+    p7 = Point(5.0, 0.0)
+    p8 = Point(-5.0, 0.0)
+    brg7 = 0.0
+    brg8 = 0.0
+    @test isinf(intersection_point(p7, p8, brg7, brg8).λ)
+
     #TODO Uncomment after network.jl has been added
     # ap = Airspace("test", [Point(50.0, 10.0), Point(50.0, 30.0),
     # Point(60.0, 30.0), Point(60.0, 10.0), Point(50.0, 10.0)])
