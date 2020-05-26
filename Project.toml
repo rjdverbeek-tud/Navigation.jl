@@ -1,11 +1,7 @@
 name = "Navigation"
 uuid = "cc87a3b2-3706-4f35-b5b4-b2c85061916d"
 authors = ["René Verbeek"]
-<<<<<<< HEAD
 version = "v0.4.0"
-=======
-version = "0.4.0"
->>>>>>> 1e7a60ee9970f7f278f4ccf5dffdb88c7f1e9160
 
 [deps]
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
