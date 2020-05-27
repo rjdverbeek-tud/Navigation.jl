@@ -24,10 +24,11 @@ Implemented Functions:
 * cross_wind
 * normalize
 * closest_point_to_pole
-* TBD airspace
+* isinside
 
 Implemented Types:
 * Point(ϕ, λ)
+* Airspace
 
 Implemented constants:
 * Rₑ_m    Radius Earth in [m]

@@ -22,6 +22,7 @@ Implemented Functions:
 * cross_wind
 * normalize
 * closest_point_to_pole
+* isinside
 
 Implemented Types:
 * Point(ϕ, λ)

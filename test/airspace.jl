@@ -15,4 +15,23 @@
     @test isinside(Point(5.0, 5.0), ap.bounding_box)
     @test isinside(Point(15.0, 5.0), ap.bounding_box) == false
     @test isinside(Point(5.0, 15.0), ap.bounding_box) == false
+
+    @test intersection_point(Point(15.0, 5.0), Point(-90.0, 0.0),
+    ap.polygon).ϕ ≈ 10.03742304591071 atol = 0.0001
+    @test intersection_point(Point(5.0, 5.0), Point(-90.0, 0.0),
+    ap.polygon).ϕ ≈ 0.0 atol = 0.0001
+
+    @test intersection_point(Point(15.0, 5.0), Point(-90.0, 0.0), ap).ϕ ≈
+    10.03742304591071 atol = 0.0001
+    @test intersection_point(Point(5.0, 5.0), Point(-90.0, 0.0), ap).ϕ ≈
+    0.0 atol = 0.0001
+    @test isnan(intersection_point(Point(5.0, 15.0), Point(-90.0, 0.0), ap).ϕ)
+
+    ap_triangle = Airspace("triangle", [p1, p2, p3, p1])
+    @test isinside(Point(9.0, 1.0), ap_triangle.bounding_box) == true
+    @test isinside(Point(9.0, 1.0), ap_triangle.polygon) == false
+
+    @test isnan(intersection_point(Point(0.0, -1.0), Point(11.0, 10.0), ap_triangle).ϕ)
+    @test intersection_point(Point(11.0, -1.0), Point(-1.0, 11.0), ap_triangle).ϕ ≈ 5.0703 atol = 0.001
+    @test intersection_point(Point(-1.0, 11.0), Point(11.0, -1.0), ap_triangle).λ ≈ 10.000   atol = 0.001
 end

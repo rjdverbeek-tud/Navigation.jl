@@ -97,6 +97,9 @@ function intersection_point(pos₁::Point, pos₂::Point, bearing₁₃::Float64
     bearing₂₃::Float64)
     Δpos = pos₂ - pos₁
     δ₁₂ = 2asind(√(sind(Δpos.ϕ / 2)^2 + cosd(pos₁.ϕ) * cosd(pos₂.ϕ) * sind(Δpos.λ/2)^2))
+    if sind(δ₁₂) * cosd(pos₁.ϕ) == 0.0 || sind(δ₁₂) * cosd(pos₂.ϕ) == 0.0
+        return Point(NaN, NaN)
+    end
     θₐ = acosd((sind(pos₂.ϕ) - sind(pos₁.ϕ) * cosd(δ₁₂)) / (sind(δ₁₂) * cosd(pos₁.ϕ)))
     θᵦ = acosd((sind(pos₁.ϕ) - sind(pos₂.ϕ) * cosd(δ₁₂)) / (sind(δ₁₂) * cosd(pos₂.ϕ)))
     local θ₁₂, θ₂₁
@@ -139,10 +142,54 @@ function intersection_point(pos₁::Point, pos₂::Point, pos₃::Point, pos₄:
     end
 end
 
-#TODO Uncomment after Network.jl has been added again
-# function intersection_point(pos₁::Point, pos₂::Point, airspace::Airspace)
-#     println(airspace.bounding_box)
-# end
+"""
+    intersection_point(pos₁::Point, pos₂::Point, polygon::Vector{Point{Float64}})
+
+Return the intersection point `pos₃` [deg] of a great circle section with a
+polygon. The great circle section is defined by two points [deg] `pos₁` and
+`pos₂` [deg].
+"""
+function intersection_point(pos₁::Point, pos₂::Point,
+    polygon::Vector{Point{Float64}})
+    min_distance = Inf
+    inter_point = Point(NaN, NaN)
+    current_point = Point(NaN, NaN)
+    poly₁ = polygon[1]
+    for poly₂ in polygon[2:end]
+        current_point = intersection_point(pos₁, pos₂, poly₁, poly₂)
+        if current_point.ϕ ∉ [Inf, NaN]
+            current_distance = distance(pos₁, current_point)
+            if min_distance > current_distance
+                min_distance = current_distance
+                inter_point = current_point
+            end
+        end
+        poly₁ = poly₂
+    end
+    return inter_point
+end
+
+"""
+    intersection_point(pos₁::Point, pos₂::Point, airspace::Airspace)
+
+Return the intersection point `pos₃` [deg] of a great circle section with an
+`Airspace`. The great circle section is defined by two points [deg] `pos₁` and
+`pos₂` [deg].
+"""
+function intersection_point(pos₁::Point, pos₂::Point,
+    airspace::Airspace)
+    inter_point = Point(NaN, NaN)
+    if isinside(pos₁, airspace.bounding_box) ||
+        isinside(pos₂, airspace.bounding_box)
+        inter_point = intersection_point(pos₁, pos₂, airspace.polygon)
+    else
+        inter_box_point = intersection_point(pos₁, pos₂, airspace.bounding_box)
+        if !isnan(inter_box_point.ϕ)
+            inter_point = intersection_point(pos₁, pos₂, airspace.polygon)
+        end
+    end
+    return inter_point
+end
 
 #TODO Source for longitude
 """
