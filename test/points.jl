@@ -35,15 +35,23 @@
 
     @test intersection_point(p1ni, p2ni, p3ni, p4ni).ϕ ≈ 50.4313888888 atol = 0.0001
     @test intersection_point(p1ni, p2ni, p3ni, p4ni).λ ≈ 20.0 atol = 0.0001
+    @test intersection_point(p1ni, p2ni, p3ni, p2ni).λ ≈ 30.0 atol = 0.0001
 
     p4ni2 = Point(49.0, 20.0)
     @test isnan(intersection_point(p1ni, p2ni, p3ni, p4ni2).λ)
+
+    p1a = Point(10.0374, 0.0)
+    p2a = Point(-90.0, 0.0)
+    p3a = Point(0.0, 0.0)
+    @test isinf(intersection_point(p3a, p2a, p1a, p3a).ϕ)
 
     p7 = Point(5.0, 0.0)
     p8 = Point(-5.0, 0.0)
     brg7 = 0.0
     brg8 = 0.0
     @test isinf(intersection_point(p7, p8, brg7, brg8).λ)
+
+    #TODO Check if intersection_point also works when crossing the datum line
 
     #TODO Uncomment after network.jl has been added
     # ap = Airspace("test", [Point(50.0, 10.0), Point(50.0, 30.0),

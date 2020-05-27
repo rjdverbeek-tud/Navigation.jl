@@ -24,7 +24,7 @@ Implemented Functions:
 * cross_wind
 * normalize
 * closest_point_to_pole
-* TBD sector
+* TBD airspace
 
 Implemented Types:
 * Point(ϕ, λ)

@@ -25,6 +25,7 @@ Implemented Functions:
 
 Implemented Types:
 * Point(ϕ, λ)
+* Airspace
 
 Implemented constants:
 * Rₑ_m    Radius Earth in [m]
@@ -38,7 +39,7 @@ module Navigation
 import Base.-, Base.Math.rad2deg, Base.Math.deg2rad
 
 include("utility.jl")
-# include("network.jl")
+include("airspace.jl")
 include("distances.jl")
 include("bearings.jl")
 include("points.jl")

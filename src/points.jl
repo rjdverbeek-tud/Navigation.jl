@@ -129,7 +129,10 @@ end
 function intersection_point(pos₁::Point, pos₂::Point, pos₃::Point, pos₄::Point)
     inter_pnt = intersection_point(pos₁, pos₃, bearing(pos₁, pos₂),
     bearing(pos₃, pos₄))
-    if distance(pos₁, pos₂) ≥ distance(pos₁, inter_pnt) && distance(pos₃, pos₄) ≥ distance(pos₃, inter_pnt)
+    if isinf(inter_pnt.ϕ)
+        return inter_pnt
+    elseif distance(pos₁, pos₂) + tolerance_m ≥ distance(pos₁, inter_pnt) &&
+        distance(pos₃, pos₄) + tolerance_m ≥ distance(pos₃, inter_pnt)
         return inter_pnt
     else
         return Point(NaN, NaN)

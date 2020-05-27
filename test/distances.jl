@@ -7,6 +7,7 @@
 
     @test distance(p1, p2) ≈ 3888e3 atol = 1e3
     @test distance(rs) ≈ 3888e3 atol = 1e3
+    @test distance(p1, p1) == 0.0
 
     p1b = Point(30.0, 100.0)
     p2b = Point(50.0, 210.0)

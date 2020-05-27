@@ -1,5 +1,7 @@
 export distance, angular_distance, cross_track_distance, along_track_distance
 
+const tolerance_m = 0.001
+
 """
     distance(pos₁::Point, pos₂::Point[, radius::Float64=Rₑ_m])
 
